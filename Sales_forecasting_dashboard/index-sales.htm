@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <h1 class="row justify-content-center mt-5"> Sales forecasting </h1>
+        <div class="row justify-content-center align-items-center mt-5">
+            <form id="salesForecastingForm" class="col-lg-6 form-inline justify-content-center" title="" method="post">
+                <div class="form-group col-md-6">
+                    <label class="col-sm-2 col-form-label" for="date">Date</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-sm-2 col-form-label" for="store">Store</label>
+                    <input type="text" id="store" name="store" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-sm-2 col-form-label" for="item">Item</label>
+                    <input type="text" id="item" name="item" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="col-sm-2 col-form-label" for="price">Price</label>
+                    <input type="text" id="price" name="price" required>
+                </div>
+                <div class="form-group col-md-6 mt-5">
+                    <input type="submit" name="submitButton" value="Get Prediction">
+                </div>
+            </form>
+        </div>
+        <h3 id="result" class="invisible row justify-content-center align-items-center mt-5"></h3>
+    </body>
+    <script>
+        $("#salesForecastingForm").submit(function(event) {
+            event.preventDefault()
+            
+            var salesForecastingData = new Array();
+            var store = $('#store').val(); 
+            var item = $('#item').val(); 
+            var price = $('#price').val(); 
+            var date = $('#date').val();
+            date = new Date(date).getTime() / 1000
+            // console.log(date); 
+            // salesForecastingData.push(date, store, item, price); 
+            salesForecastingData.push(date, store, item, price); 
+
+            $.ajax({
+                type: "get",
+                url: "http://c3087f3a-b943-4376-af0e-b64b6caa3beb.centralus.azurecontainer.io/score?data=[[" + salesForecastingData+"]]",
+                success: function(data) {
+                    $("#result").html("Result is : " + data['result']);
+                    $("#result").removeClass('invisible');
+                    $("#result").addClass('visible');
+                },
+                error: function() {
+                    alert('error handling here');
+                }
+            })
+        });
+    </script>
+</html>
