@@ -1,0 +1,6 @@
+computeType: ACI
+containerResourceRequirements:
+  cpu: 1
+  memoryInGB: 4
+  location: centralus
+
